@@ -79,10 +79,15 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- SLF4J API -->
+            <!-- SLF4J API & Open Liberty Runtime Bridge -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-jdk14</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
 
@@ -198,6 +203,7 @@
                         </dependency>
                     </dependencies>
                     <configuration>
+                        <argLine>-Dnet.bytebuddy.experimental=true</argLine>
                         <includes>
                             <include>**/*Test.java</include>
                         </includes>

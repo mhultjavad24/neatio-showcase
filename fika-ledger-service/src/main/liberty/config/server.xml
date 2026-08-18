@@ -4,6 +4,11 @@
         <feature>microProfile-6.1</feature>
     </featureManager>
 
+    <!-- Basic User Registry to satisfy CSIv2 / ORB requirements under full Jakarta EE 10 -->
+    <basicRegistry id="basic" realm="BasicRealm">
+        <user name="admin" password="adminPassword" />
+    </basicRegistry>
+
     <httpEndpoint id="defaultHttpEndpoint"
                   host="*"
                   httpPort="9080"

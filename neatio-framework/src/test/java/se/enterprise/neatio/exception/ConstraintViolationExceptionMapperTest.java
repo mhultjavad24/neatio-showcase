@@ -45,12 +45,21 @@ class ConstraintViolationExceptionMapperTest {
     @Test
     void shouldMapConstraintViolationExceptionTo400ProblemDetail() {
         ConstraintViolation<?> violation = mock(ConstraintViolation.class);
-        Path path = mock(Path.class);
         Path.Node node = mock(Path.Node.class);
-
         when(node.getName()).thenReturn("amount");
-        Iterator<Path.Node> iterator = Collections.singletonList(node).iterator();
-        when(path.iterator()).thenReturn(iterator);
+
+        Path path = new Path() {
+            @Override
+            public Iterator<Node> iterator() {
+                return Collections.singletonList(node).iterator();
+            }
+
+            @Override
+            public String toString() {
+                return "amount";
+            }
+        };
+
         when(violation.getPropertyPath()).thenReturn(path);
         when(violation.getInvalidValue()).thenReturn(0);
         when(violation.getMessage()).thenReturn("Kudos transfer must be at least 1 credit.");
