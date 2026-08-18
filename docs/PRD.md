@@ -284,9 +284,10 @@ neatio-showcase/
     └── src/
         ├── main/
         │   ├── java/se/enterprise/fikavault/
-        │   │   ├── api/           # JAX-RS Resources & DTO Records
-        │   │   ├── domain/        # Business Logic & CDI Beans
-        │   │   └── RestApp.java   # @ApplicationPath("/api/v1")
+        │   │   ├── RestApp.java   # @ApplicationPath("/api/v1")
+        │   │   ├── boundary/      # BOUNDARY: JAX-RS Resources & DTO Records
+        │   │   ├── control/       # CONTROL: Business Logic & CDI Beans
+        │   │   └── entity/        # ENTITY: Domain Models & Exceptions
         │   └── resources/
         │       ├── ValidationMessages.properties
         │       └── META-INF/beans.xml

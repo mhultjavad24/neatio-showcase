@@ -4,7 +4,7 @@ import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import se.enterprise.fikavault.domain.repository.InMemoryLedgerRepository;
+import se.enterprise.fikavault.control.InMemoryLedgerRepository;
 import se.enterprise.fikavault.health.LedgerLivenessCheck;
 import se.enterprise.fikavault.health.LedgerReadinessCheck;
 

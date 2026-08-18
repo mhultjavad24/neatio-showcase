@@ -2,7 +2,7 @@ package se.enterprise.fikavault.health;
 
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.junit.jupiter.api.Test;
-import se.enterprise.fikavault.domain.repository.InMemoryLedgerRepository;
+import se.enterprise.fikavault.control.InMemoryLedgerRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Readiness;
-import se.enterprise.fikavault.domain.repository.InMemoryLedgerRepository;
+import se.enterprise.fikavault.control.InMemoryLedgerRepository;
 
 /**
  * MicroProfile Health Readiness check verifying that domain repositories are initialized.

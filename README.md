@@ -21,8 +21,9 @@ neatio-showcase/
 └── fika-ledger-service/                      # The business microservice (se.enterprise.fikavault)
     ├── src/main/java/se/enterprise/fikavault/
     │   ├── RestApp.java                      # @ApplicationPath("/api/v1")
-    │   ├── api/                              # KudosResource, FikaResource, LedgerResource
-    │   ├── domain/                           # Business logic, repositories, models, exceptions
+    │   ├── boundary/                         # BOUNDARY: JAX-RS Resources & DTOs
+    │   ├── control/                          # CONTROL: Business logic & repositories
+    │   ├── entity/                           # ENTITY: Domain models & exceptions
     │   └── health/                           # MP Health @Liveness and @Readiness checks
     ├── src/main/resources/
     │   ├── ValidationMessages.properties     # Bean Validation message bundles (default & Swedish)
