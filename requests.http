@@ -1,0 +1,172 @@
+### ====================================================================
+### Neatio Showcase — The Fika & Kudos Ledger API
+### Chronological Request Walkthrough (IntelliJ HTTP Client)
+### Base URL: http://localhost:9080
+### ====================================================================
+
+@baseUrl = http://localhost:9080
+@correlationId = c83b4b8c-572f-4882-93cb-3392305a415b
+
+### --------------------------------------------------------------------
+### STEP 1: Verify MicroProfile Health Liveness & Readiness
+### Expected: 200 OK with UP status
+### --------------------------------------------------------------------
+GET {{baseUrl}}/health
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/health/live
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/health/ready
+Accept: application/json
+
+
+### --------------------------------------------------------------------
+### STEP 2: Inspect Initial Balances
+### Expected: 
+###   - Linnea (SE-9821): balance = 4 credits
+###   - Erik (SE-1001): balance = 50 credits
+### --------------------------------------------------------------------
+GET {{baseUrl}}/api/v1/ledger/SE-9821
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/v1/ledger/SE-1001
+Accept: application/json
+
+
+### --------------------------------------------------------------------
+### STEP 3: Attempt Fika Voucher Redemption with Insufficient Balance
+### Scenario: Linnea (SE-9821) has only 4 credits, but 10 are required.
+### Expected: HTTP 422 Unprocessable Entity (RFC 7807 Problem Details)
+### --------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/fika/redeem
+Content-Type: application/json
+X-Correlation-ID: {{correlationId}}
+
+{
+  "employeeId": "SE-9821"
+}
+
+
+### --------------------------------------------------------------------
+### STEP 4: Trigger Bean Validation Errors
+### Scenario: Invalid amount (0) and missing/blank sender ID.
+### Expected: HTTP 400 Bad Request (RFC 7807 with invalidParameters)
+### --------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/kudos
+Content-Type: application/json
+X-Correlation-ID: {{correlationId}}
+
+{
+  "senderId": "",
+  "recipientId": "SE-9821",
+  "amount": 0,
+  "message": "Hi",
+  "category": "TEAMWORK"
+}
+
+
+### --------------------------------------------------------------------
+### STEP 5: Trigger Business Rule Violation (Self-Transfer)
+### Scenario: Employee attempts to transfer Kudos to themselves.
+### Expected: HTTP 422 Unprocessable Entity (RFC 7807 Problem Details)
+### --------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/kudos
+Content-Type: application/json
+X-Correlation-ID: {{correlationId}}
+
+{
+  "senderId": "SE-1001",
+  "recipientId": "SE-1001",
+  "amount": 5,
+  "message": "Sending kudos to myself",
+  "category": "KINDNESS"
+}
+
+
+### --------------------------------------------------------------------
+### STEP 6: Execute Valid Kudos Transfer
+### Scenario: Erik (SE-1001) sends 20 credits to Linnea (SE-9821).
+### Expected: HTTP 201 Created with transaction receipt
+### --------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/kudos
+Content-Type: application/json
+X-Correlation-ID: {{correlationId}}
+
+{
+  "senderId": "SE-1001",
+  "recipientId": "SE-9821",
+  "amount": 20,
+  "message": "Outstanding work architecting the Neatio Framework showcase!",
+  "category": "CRAFTSMANSHIP"
+}
+
+
+### --------------------------------------------------------------------
+### STEP 7: Verify Updated Balances Post-Transfer
+### Expected:
+###   - Linnea (SE-9821): balance = 24 credits (4 + 20)
+###   - Erik (SE-1001): balance = 30 credits (50 - 20)
+### --------------------------------------------------------------------
+GET {{baseUrl}}/api/v1/ledger/SE-9821
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/v1/ledger/SE-1001
+Accept: application/json
+
+
+### --------------------------------------------------------------------
+### STEP 8: Linnea Redeems First Fika Voucher (Cost: 10 Credits)
+### Expected: HTTP 200 OK with QR Voucher payload and expiry
+### --------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/fika/redeem
+Content-Type: application/json
+X-Correlation-ID: {{correlationId}}
+
+{
+  "employeeId": "SE-9821"
+}
+
+
+### --------------------------------------------------------------------
+### STEP 9: Linnea Redeems Second Fika Voucher (Cost: 10 Credits)
+### Expected: HTTP 200 OK with second QR Voucher
+### --------------------------------------------------------------------
+POST {{baseUrl}}/api/v1/fika/redeem
+Content-Type: application/json
+X-Correlation-ID: {{correlationId}}
+
+{
+  "employeeId": "SE-9821"
+}
+
+
+### --------------------------------------------------------------------
+### STEP 10: Verify Final Ledger State and Audit Trail
+### Expected:
+###   - Linnea balance = 4 credits
+###   - Vouchers redeemed = 2
+###   - Recent transactions list contains transfer and redemptions
+### --------------------------------------------------------------------
+GET {{baseUrl}}/api/v1/ledger/SE-9821
+Accept: application/json
+
+
+### --------------------------------------------------------------------
+### STEP 11: Inspect MicroProfile Metrics & OpenAPI Documentation
+### --------------------------------------------------------------------
+GET {{baseUrl}}/metrics
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/openapi
+Accept: application/json

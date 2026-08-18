@@ -1,0 +1,20 @@
+<server description="Neatio Fika Ledger Showcase Server">
+    <featureManager>
+        <feature>jakartaee-10.0</feature>
+        <feature>microProfile-6.1</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="9080"
+                  httpsPort="9443" />
+
+    <!-- Neatio Framework Logging Output Formatter -->
+    <logging traceSpecification="*=info:se.enterprise.neatio.*=all:se.enterprise.fikavault.*=all"
+             consoleFormat="json"
+             messageFormat="json" />
+
+    <webApplication id="fika-ledger"
+                    location="fika-ledger-api.war"
+                    contextRoot="/" />
+</server>
